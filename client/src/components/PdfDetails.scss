@@ -1,0 +1,104 @@
+.pdf-details-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f8f8f8;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.pdf-title {
+  margin-top: 0;
+}
+
+.pdf-viewer {
+  margin-top: 20px;
+}
+
+.comments-section {
+  margin-top: 20px;
+}
+
+.comment-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.comment {
+  margin-bottom: 10px;
+}
+
+.comment-username {
+  font-weight: bold;
+}
+
+.add-comment-section {
+  display: flex;
+  margin-top: 20px;
+}
+
+.comment-input {
+  flex: 1;
+  padding: 5px;
+  margin-right: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.comment-button {
+  padding: 5px 10px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.share-pdf-section {
+  margin-bottom: 20px;
+}
+
+.share-pdf-button {
+  padding: 5px 10px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.share-to-all-section {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.share-to-all-label {
+  margin-right: 10px;
+}
+
+.sharable-link-section {
+  display: flex;
+  align-items: center;
+}
+
+.sharable-link-label {
+  margin-right: 10px;
+}
+
+.sharable-link-input {
+  flex: 1;
+  padding: 5px;
+  margin-right: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.copy-icon {
+  padding: 5px 10px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}

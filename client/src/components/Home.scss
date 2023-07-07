@@ -1,0 +1,49 @@
+.home-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: white;
+    height: 95vh;
+    h2 {
+      margin-bottom: 20px;
+    }
+  
+    .pdf-list {
+      display: flex;
+      justify-content: space-around;
+      align-items: flex-start;
+      gap: 40px;
+     width: 100%;
+      flex-wrap: wrap;
+      .pdf-category {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+  
+        h3 {
+          margin-bottom: 10px;
+        }
+  
+        ul {
+          list-style-type: none;
+          padding: 0;
+          margin: 0;
+  
+          li {
+            margin-bottom: 5px;
+          }
+        }
+  
+        p {
+          font-style: italic;
+        }
+      }
+    }
+  
+    .upload-link {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  }
+  
