@@ -15,7 +15,7 @@ const server = http.createServer(app);
 
 const io =socketIO(server, {
   cors: {
-      origin: "http://localhost:3000",
+      origin: "https://willowy-sable-4e98a1.netlify.app",
   }
 });
 
