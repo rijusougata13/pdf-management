@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router';
 import './PdfDetails.scss';
+import socketIOClient from 'socket.io-client';
+
+const socket = socketIOClient('https://pdf-management-mpoo.onrender.com');
 
 const PdfDetails = () => {
   const { id } = useParams();
@@ -16,37 +19,49 @@ const PdfDetails = () => {
   const [shareToAll, setShareToAll] = useState(false);
   const [sharableLink, setSharableLink] = useState('');
 
+  const getPdfDetails = async () => {
+    try {
+      const response = await axios.get(`/pdfs/${id}`);
+      setPdf(response.data);
+      setLoading(false);
+
+      // Check if the user is authorized to view the PDF
+      const currentUser = localStorage.getItem('username');
+      const { sharedWith, open } = response.data;
+      const uploadedByUser = response.data.uploadedBy === currentUser;
+      setUploadedByUser(uploadedByUser);
+      const sharedWithUser = sharedWith.includes(currentUser);
+      setIsAuthorized(uploadedByUser || sharedWithUser || (open && currentUser));
+      setSharedWith(sharedWith);
+
+      // Set the initial shareToAll state based on PDF open status
+      setShareToAll(open);
+
+      // Generate sharable link
+      const baseUrl = window.location.origin;
+      const link = `${baseUrl}/pdfs/${id}`;
+      setSharableLink(link);
+    } catch (error) {
+      console.error(error);
+      setLoading(false);
+    }
+  };
   useEffect(() => {
-    const getPdfDetails = async () => {
-      try {
-        const response = await axios.get(`/pdfs/${id}`);
-        setPdf(response.data);
-        setLoading(false);
-
-        // Check if the user is authorized to view the PDF
-        const currentUser = localStorage.getItem('username');
-        const { sharedWith, open } = response.data;
-        const uploadedByUser = response.data.uploadedBy === currentUser;
-        setUploadedByUser(uploadedByUser);
-        const sharedWithUser = sharedWith.includes(currentUser);
-        setIsAuthorized(uploadedByUser || sharedWithUser || (open && currentUser));
-        setSharedWith(sharedWith);
-
-        // Set the initial shareToAll state based on PDF open status
-        setShareToAll(open);
-
-        // Generate sharable link
-        const baseUrl = window.location.origin;
-        const link = `${baseUrl}/pdfs/${id}`;
-        setSharableLink(link);
-      } catch (error) {
-        console.error(error);
-        setLoading(false);
-      }
-    };
+    
 
     getPdfDetails();
   }, [id]);
+
+  useEffect(() => {
+    socket.on('newComment', (data) => {
+      // Handle the new comment event
+      getPdfDetails();
+      // console.log('New comment:', data.comment);
+    });
+
+    
+  }, []);
+
 
   useEffect(() => {
     if (pdf && isAuthorized) {

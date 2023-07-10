@@ -15,7 +15,17 @@ const Home = () => {
 
   const fetchPdfs = async () => {
     try {
-      const response = await axios.get('/pdfs');
+      console.log("username",userName)
+      // const response = await axios.get('/userPdfs',{email:userName});
+      const response= await axios({
+        method: 'post',
+        url: '/userPdfs',
+        headers: {}, 
+        data: {
+          email:userName
+        }
+      
+      })
       const allPdfs = response.data;
       setOwnedPdfs(allPdfs.filter((pdf) => pdf.uploadedBy === userName));
       setSharedPdfs(allPdfs.filter((pdf) => pdf.sharedWith.includes(userName)));

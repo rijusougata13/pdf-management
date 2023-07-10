@@ -3,12 +3,32 @@ const mongoose = require('mongoose');
 const multer = require('multer');
 const path = require('path');
 const cors = require('cors');
+const http = require('http');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const socketIO = require('socket.io');
 
 const app = express();
 app.use(express.json());
 app.use(cors());
+const server = http.createServer(app);
+
+const io =socketIO(server, {
+  cors: {
+      origin: "http://localhost:3000",
+  }
+});
+
+io.on('connection', (socket) => {
+  console.log('A user connected');
+
+  // Handle disconnect event
+  socket.on('disconnect', () => {
+    console.log('A user disconnected');
+  });
+});
+
+
 
 // Connect to MongoDB
 mongoose.connect('mongodb+srv://rijusougata13:mongodb1234@realmcluster.22swx.mongodb.net/test', {
@@ -73,6 +93,16 @@ app.post('/upload', upload.single('pdf'), async (req, res) => {
 app.get('/pdfs', async (req, res) => {
   try {
     const pdfs = await Pdf.find();
+    res.status(200).json(pdfs);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Failed to retrieve PDFs' });
+  }
+});
+
+app.post('/userPdfs', async (req, res) => {
+  try {
+    const pdfs = await Pdf.find({uploadedBy:req.body.email});
     res.status(200).json(pdfs);
   } catch (error) {
     console.error(error);
@@ -152,6 +182,7 @@ Continuation:
       const { username, comment } = req.body;
       pdf.comments.push({ username, comment });
       await pdf.save();
+      io.emit('newComment', { pdfId: req.params.id, comment: { username, comment } });
       res.status(200).json({ message: 'Comment added successfully' });
     }
   } catch (error) {
@@ -227,6 +258,7 @@ const UserSchema = new mongoose.Schema({
   });
 
 // Start the server
-app.listen(5000, () => {
+server.listen(5000, () => {
   console.log('Server is running on port 5000');
+  
 });
